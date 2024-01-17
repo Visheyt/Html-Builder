@@ -18,7 +18,9 @@ stdin.on('data', (data) => {
     writeStream.write(string);
   }
 });
-
+process.on('SIGINT', () => {
+  process.exit();
+});
 process.on('exit', () => {
   console.log('\nПрощайте милый господин,ну или госпожа');
 });

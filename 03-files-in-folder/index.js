@@ -14,9 +14,7 @@ fs.readdir(finaDirectory, (err, items) => {
       }
       if (stats.isFile()) {
         let fileName = item.split('.');
-        console.log(
-          `${fileName[0]} - ${fileName[1]} - ${stats.size / 102400}mb`,
-        );
+        console.log(`${fileName[0]} - ${fileName[1]} - ${stats.size}B`);
       }
     });
   }

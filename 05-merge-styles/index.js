@@ -5,6 +5,9 @@ const fs2 = require('fs');
 async function mergeCss() {
   let directory = path.join(__dirname, 'styles');
   let finalDirectory = path.join(__dirname, 'project-dist');
+  fs2.writeFile(path.join(finalDirectory, 'bundle.css'), '', (err) => {
+    if (err) throw err;
+  });
   try {
     let cssFiles = await fs.readdir(directory, {
       withFileTypes: true,

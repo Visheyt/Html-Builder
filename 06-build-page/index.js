@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const fs2 = require('fs');
 
 async function makeDir() {
   try {
@@ -34,3 +35,32 @@ async function copyFunc() {
   }
 }
 copyFunc();
+
+async function mergeCss() {
+  let cssDir = path.join(__dirname, 'styles');
+  let bundleCssDir = path.join(__dirname, 'project-dist');
+  fs2.writeFile(path.join(bundleCssDir, 'style.css'), '', (err) => {
+    if (err) throw err;
+  });
+  try {
+    let cssFiles = await fs.readdir(cssDir, {
+      withFileTypes: true,
+    });
+    for (let cssFile of cssFiles) {
+      if (cssFile.name.split('.')[1] === 'css') {
+        let readStream = fs2.createReadStream(path.join(cssDir, cssFile.name), {
+          encoding: 'utf-8',
+        });
+        readStream.on('data', (chunk) => {
+          fs.appendFile(path.join(bundleCssDir, 'style.css'), chunk, (err) => {
+            if (err) throw err;
+          });
+        });
+      }
+    }
+    console.log('Создание style.css завершено');
+  } catch (error) {
+    console.log(`We can\`t merge styles:${error}`);
+  }
+}
+mergeCss();

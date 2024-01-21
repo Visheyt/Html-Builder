@@ -63,4 +63,37 @@ async function mergeCss() {
     console.log(`We can\`t merge styles:${error}`);
   }
 }
-mergeCss();
+mergeCss().then();
+
+async function createHtml() {
+  let finalHtmlDir = path.join(__dirname, 'project-dist');
+  try {
+    let templateHtml = await fs.readFile(
+      path.resolve(__dirname, 'template.html'),
+      { encoding: 'utf-8' },
+    );
+    await fs.writeFile(path.join(finalHtmlDir, 'index.html'), templateHtml);
+    let finalHtml = await fs.readFile(path.join(finalHtmlDir, 'index.html'), {
+      encoding: 'utf-8',
+    });
+    let componentsDir = path.join(__dirname, 'components');
+    let components = await fs.readdir(componentsDir);
+    for (let component of components) {
+      let componentName = component.split('.')[0];
+      let componentContent = await fs.readFile(
+        path.join(componentsDir, component),
+        { encoding: 'utf-8' },
+      );
+      finalHtml = finalHtml.replace(`{{${componentName}}}`, componentContent);
+    }
+    fs.writeFile(path.join(finalHtmlDir, 'index.html'), finalHtml, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    console.log('Cоздание Html завершено');
+  } catch (error) {
+    console.error(`Ошибка при сборке Html: ${error}`);
+  }
+}
+createHtml();

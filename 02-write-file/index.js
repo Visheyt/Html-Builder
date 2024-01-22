@@ -7,7 +7,7 @@ fs.writeFile(path.resolve(__dirname, 'text.txt'), '', (err) => {
     console.log(err);
   }
 });
-stdout.write('Приветствую, пожалуйста введите данные для записи');
+stdout.write('Hello, please enter your information.\n');
 let string = '';
 stdin.on('data', (data) => {
   if (data.toString().trim() === 'exit') {
@@ -22,5 +22,5 @@ process.on('SIGINT', () => {
   process.exit();
 });
 process.on('exit', () => {
-  console.log('\nПрощайте милый господин,ну или госпожа');
+  console.log('\nThank you, good bye!');
 });
